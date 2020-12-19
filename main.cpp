@@ -1,3 +1,19 @@
+#include <SFML/Graphics.hpp>
+using namespace sf;
+
+struct Car
+{
+  float x,y,speed,angle; int n;
+
+  Car() {speed=2; angle=0; n=0;}
+
+  void move()
+   {
+    x += sin(angle) * speed;
+    y -= cos(angle) * speed;
+   }
+};
+
 int main()
 {
     RenderWindow app(VideoMode(640, 480), "Car Racing Game!");
@@ -41,6 +57,14 @@ int main()
     if (Keyboard::isKeyPressed(Keyboard::Right)) Right=1;
     if (Keyboard::isKeyPressed(Keyboard::Down)) Down=1;
     if (Keyboard::isKeyPressed(Keyboard::Left)) Left=1;
+
+    if (Up && speed<maxSpeed)
+        if (speed < 0)  speed += dec;
+        else  speed += acc;
+
+    if (Down && speed>-maxSpeed)
+        if (speed > 0) speed -= dec;
+        else  speed -= acc;
 
     if (!Up && !Down)
         if (speed - dec > 0) speed -= dec;
