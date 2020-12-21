@@ -12,6 +12,15 @@ struct Car
     x += sin(angle) * speed;
     y -= cos(angle) * speed;
    }
+
+   void findTarget()
+  {
+    float tx=points[n][0];
+    float ty=points[n][1];
+    float beta = angle-atan2(tx-x,-ty+y);
+    if (sin(beta)<0) angle+=0.005*speed; else angle-=0.005*speed;
+    if ((x-tx)*(x-tx)+(y-ty)*(y-ty)<25*25) n=(n+1)%num;
+   }
 };
 
 int main()
@@ -73,6 +82,10 @@ int main()
 
     if (Right && speed!=0)  angle += turnSpeed * speed/maxSpeed;
     if (Left && speed!=0)   angle -= turnSpeed * speed/maxSpeed;
+
+    for(int i=0;i<N;i++) car[i].move();
+    for(int i=1;i<N;i++) car[i].findTarget();
+    
 
     return 0;
 }
