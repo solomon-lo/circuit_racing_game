@@ -86,6 +86,20 @@ int main()
     for(int i=0;i<N;i++) car[i].move();
     for(int i=1;i<N;i++) car[i].findTarget();
     
+    for(int j=0;j<N;j++)
+    {      
+        int dx=0, dy=0;
+        while (dx*dx+dy*dy<4*R*R)
+         {
+           car[i].x+=dx/10.0;
+           car[i].x+=dy/10.0;
+           car[j].x-=dx/10.0;
+           car[j].y-=dy/10.0;
+           dx = car[i].x-car[j].x;
+           dy = car[i].y-car[j].y;
+           if (!dx && !dy) break;
+         }
+    }
 
     return 0;
 }
