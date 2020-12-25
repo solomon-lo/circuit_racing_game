@@ -101,5 +101,12 @@ int main()
          }
     }
 
+    for(int i=0;i<N;i++)
+    {
+      sCar.setPosition(car[i].x-offsetX,car[i].y-offsetY);
+      sCar.setColor(colors[i]);
+      app.draw(sCar);
+    }
+
     return 0;
 }
