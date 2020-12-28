@@ -101,12 +101,23 @@ int main()
          }
     }
 
+    if (car[0].x>320) offsetX = car[0].x-320;
+    if (car[0].y>240) offsetY = car[0].y-240;
+
+    sBackground.setPosition(-offsetX,-offsetY);
+    app.draw(sBackground);
+
+    Color colors[10] = {Color::Red, Color::Green, Color::Magenta, Color::Blue, Color::White};
+
+
     for(int i=0;i<N;i++)
     {
       sCar.setPosition(car[i].x-offsetX,car[i].y-offsetY);
       sCar.setColor(colors[i]);
       app.draw(sCar);
     }
+
+    app.display();
 
     return 0;
 }
