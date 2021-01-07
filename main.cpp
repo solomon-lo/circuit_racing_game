@@ -11,7 +11,6 @@ int points[num][2] = {300, 610,
                       2560,3150,
                       500, 3300};
 
-
 struct Car
 {
   float x,y,speed,angle; int n;
@@ -24,7 +23,7 @@ struct Car
     y -= cos(angle) * speed;
    }
 
-   void findTarget()
+  void findTarget()
   {
     float tx=points[n][0];
     float ty=points[n][1];
@@ -34,33 +33,39 @@ struct Car
    }
 };
 
+
 int main()
 {
     RenderWindow app(VideoMode(640, 480), "Car Racing Game!");
     app.setFramerateLimit(60);
 
-    Texture t1, t2;
+    Texture t1,t2,t3;
     t1.loadFromFile("images/background.png");
     t2.loadFromFile("images/car.png");
     t1.setSmooth(true);
     t2.setSmooth(true);
 
     Sprite sBackground(t1), sCar(t2);
-    sBackground.scale(2, 2);
+    sBackground.scale(2,2);
 
-    const int N = 1;
+    sCar.setOrigin(22, 22);
+    float R=22;
+
+    const int N=5;
     Car car[N];
-    for (int i = 0; i < N; i++)
+    for(int i=0;i<N;i++)
     {
-        car[i].x = 300 + i * 50;
-        car[i].y = 1700 + i * 80;
-        car[i].speed = 7 + i;
+      car[i].x=300+i*50;
+      car[i].y=1700+i*80;
+      car[i].speed=7+i;
     }
 
-    float speed = 0, angle = 0;
-    float maxSpeed = 12.0;
-    float acc = 0.2, dec = 0.3;
-    float turnSpeed = 0.12;
+   float speed=0,angle=0;
+   float maxSpeed=12.0;
+   float acc=0.2, dec=0.3;
+   float turnSpeed=0.08;
+
+   int offsetX=0,offsetY=0;
 
     while (app.isOpen())
     {
@@ -70,7 +75,6 @@ int main()
             if (e.type == Event::Closed)
                 app.close();
         }
-    }
 
     bool Up=0,Right=0,Down=0,Left=0;
     if (Keyboard::isKeyPressed(Keyboard::Up)) Up=1;
@@ -78,6 +82,7 @@ int main()
     if (Keyboard::isKeyPressed(Keyboard::Down)) Down=1;
     if (Keyboard::isKeyPressed(Keyboard::Left)) Left=1;
 
+    //car movement
     if (Up && speed<maxSpeed)
         if (speed < 0)  speed += dec;
         else  speed += acc;
@@ -94,9 +99,14 @@ int main()
     if (Right && speed!=0)  angle += turnSpeed * speed/maxSpeed;
     if (Left && speed!=0)   angle -= turnSpeed * speed/maxSpeed;
 
+    car[0].speed = speed;
+    car[0].angle = angle;
+
     for(int i=0;i<N;i++) car[i].move();
     for(int i=1;i<N;i++) car[i].findTarget();
-    
+
+    //collision
+    for(int i=0;i<N;i++)
     for(int j=0;j<N;j++)
     {      
         int dx=0, dy=0;
@@ -112,6 +122,9 @@ int main()
          }
     }
 
+
+    app.clear(Color::White);
+
     if (car[0].x>320) offsetX = car[0].x-320;
     if (car[0].y>240) offsetY = car[0].y-240;
 
@@ -120,15 +133,16 @@ int main()
 
     Color colors[10] = {Color::Red, Color::Green, Color::Magenta, Color::Blue, Color::White};
 
-
     for(int i=0;i<N;i++)
     {
       sCar.setPosition(car[i].x-offsetX,car[i].y-offsetY);
+      sCar.setRotation(car[i].angle*180/3.141593);
       sCar.setColor(colors[i]);
       app.draw(sCar);
     }
 
     app.display();
+    }
 
     return 0;
 }
